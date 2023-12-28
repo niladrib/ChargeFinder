@@ -1,18 +1,22 @@
-import React, { ReducerAction, ReducerState } from "react";
+import React from "react";
 import openChargeMap from "../api/openChargeMap";
-import createDataContext, { ContextBuilder}  from "./createDataContext";
+import createDataContext, { ContextBuilder } from "./createDataContext";
 
 type ChargerInfo = {
   ID: string;
   AddressInfo: { AddressLine1: string; Town: string; StateOrProvince: string };
 };
+
 type ChargerReducerAction =
   | { type: "initialize" }
   | { type: "add_charger"; payload: ChargerInfo };
 
 type ChargerReducerState = { chargers: ChargerInfo[] };
 
-const reducer = (state: ChargerReducerState, action: ChargerReducerAction): ChargerReducerState => {
+const reducer = (
+  state: ChargerReducerState,
+  action: ChargerReducerAction
+): ChargerReducerState => {
   switch (action.type) {
     case "initialize":
       return { chargers: [] };
@@ -21,16 +25,15 @@ const reducer = (state: ChargerReducerState, action: ChargerReducerAction): Char
       return { chargers: [...state.chargers, action.payload] };
 
     default:
-      const _exhaustivenessCheck: never = action;
-      return _exhaustivenessCheck;
+      throw new Error("unhandled Charger Action");
   }
 };
 
 interface ChargerModel {
   initialize: () => void;
   addCharger: (charger: ChargerInfo) => void;
-  getChargers: () => void; 
-  readonly state: ChargerReducerState;
+  getChargers: () => void;
+  readonly chargerState: ChargerReducerState;
 }
 
 const initialize = (dispatch: React.Dispatch<ChargerReducerAction>) => {
@@ -81,17 +84,25 @@ const getChargers = (dispatch: React.Dispatch<ChargerReducerAction>) => {
   };
 };
 
-let builder: ContextBuilder<ChargerReducerAction, ChargerReducerState, ChargerModel> = {
-  build: (dispatch: React.Dispatch<ChargerReducerAction>, 
-    state: ChargerReducerState) => {
-    let chargerCtx: ChargerModel = {
-      initialize : initialize(dispatch),
+let modelBuilder: ContextBuilder<
+  ChargerReducerAction,
+  ChargerReducerState,
+  ChargerModel
+> = {
+  build: (
+    dispatch: React.Dispatch<ChargerReducerAction>,
+    state: ChargerReducerState
+  ) => {
+    // console.log(`Building Model`);
+    let model: ChargerModel = {
+      initialize: initialize(dispatch),
       addCharger: addCharger(dispatch),
       getChargers: getChargers(dispatch),
-      state
+      chargerState: state,
     };
-    return chargerCtx;
-  }
+    return model;
+  },
 };
 
-export const { provider: ChargerProvider, context: chargerContext } = createDataContext(reducer, builder , {chargers: []});
+export const { provider: ChargerProvider, context: ChargerContext } =
+  createDataContext(reducer, modelBuilder, { chargers: [] });

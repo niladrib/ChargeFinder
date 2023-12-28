@@ -4,10 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "./src/screens/HomeScreen";
-import {
-  ChargerProvider,
-  chargerContext,
-} from "./src/context/CreateChargerContext";
+import { ChargerProvider, ChargerContext } from "./src/context/ChargerContext";
 const Stack = createNativeStackNavigator();
 
 const App = () => {

@@ -8,12 +8,12 @@ interface ModelBuilder<Action, State, Model> {
   build: (dispatch: React.Dispatch<Action>, state: State) => Model;
 }
 
-export default <Action, State, Context>(
+export default <Action, State, Model>(
   reducer: (state: State, action: Action) => State,
-  modelBuilder: ModelBuilder<Action, State, Context>,
+  modelBuilder: ModelBuilder<Action, State, Model>,
   defaultValue: State
 ) => {
-  const context = React.createContext<Partial<Context>>({});
+  const context = React.createContext<Partial<Model>>({});
 
   const provider = ({ children }: Props) => {
     const [state, dispatch] = useReducer(reducer, defaultValue);

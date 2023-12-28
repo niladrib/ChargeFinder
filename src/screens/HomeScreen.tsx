@@ -1,13 +1,15 @@
 import React, { useContext } from "react";
 import { View, StyleSheet, Text, Button } from "react-native";
 import openChargeMap from "../api/openChargeMap";
-import { chargerContext } from "../context/CreateChargerContext";
+import { ChargerContext } from "../context/ChargerContext";
+import Map from "../components/Map";
 
 const HomeScreen = () => {
-  const context = useContext(chargerContext);
-  console.log(`chargers:${JSON.stringify(context.state?.chargers)}`);
+  const context = useContext(ChargerContext);
+  console.log(`chargers:${JSON.stringify(context.chargerState?.chargers)}`);
   return (
     <View>
+      <Map />
       <Button
         color="#0064ff"
         title="Find Chargers Near Me"
