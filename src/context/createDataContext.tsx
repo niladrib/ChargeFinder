@@ -4,24 +4,24 @@ interface Props {
   children?: ReactNode;
 }
 
-interface ContextBuilder<Action, State, Context> {
-  build: (dispatch: React.Dispatch<Action>, state: State) => Context;
+interface ModelBuilder<Action, State, Model> {
+  build: (dispatch: React.Dispatch<Action>, state: State) => Model;
 }
 
 export default <Action, State, Context>(
   reducer: (state: State, action: Action) => State,
-  contextBuilder: ContextBuilder<Action, State, Context>,
+  modelBuilder: ModelBuilder<Action, State, Context>,
   defaultValue: State
 ) => {
   const context = React.createContext<Partial<Context>>({});
 
   const provider = ({ children }: Props) => {
     const [state, dispatch] = useReducer(reducer, defaultValue);
-    const contextValue = contextBuilder.build(dispatch, state);
-    return <context.Provider value={contextValue}>{children}</context.Provider>;
+    const model = modelBuilder.build(dispatch, state);
+    return <context.Provider value={model}>{children}</context.Provider>;
   };
 
   return { context, provider };
 };
 
-export { ContextBuilder };
+export { ModelBuilder as ContextBuilder };

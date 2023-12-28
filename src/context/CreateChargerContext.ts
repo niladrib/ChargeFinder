@@ -12,13 +12,6 @@ type ChargerReducerAction =
 
 type ChargerReducerState = { chargers: ChargerInfo[] };
 
-interface ChargerContext {
-  initialize: () => void;
-  addCharger: (charger: ChargerInfo) => void;
-  getChargers: () => void; 
-  readonly state: ChargerReducerState;
-}
-
 const reducer = (state: ChargerReducerState, action: ChargerReducerAction): ChargerReducerState => {
   switch (action.type) {
     case "initialize":
@@ -32,6 +25,13 @@ const reducer = (state: ChargerReducerState, action: ChargerReducerAction): Char
       return _exhaustivenessCheck;
   }
 };
+
+interface ChargerModel {
+  initialize: () => void;
+  addCharger: (charger: ChargerInfo) => void;
+  getChargers: () => void; 
+  readonly state: ChargerReducerState;
+}
 
 const initialize = (dispatch: React.Dispatch<ChargerReducerAction>) => {
   return () => {
@@ -81,10 +81,10 @@ const getChargers = (dispatch: React.Dispatch<ChargerReducerAction>) => {
   };
 };
 
-let builder: ContextBuilder<ChargerReducerAction, ChargerReducerState, ChargerContext> = {
+let builder: ContextBuilder<ChargerReducerAction, ChargerReducerState, ChargerModel> = {
   build: (dispatch: React.Dispatch<ChargerReducerAction>, 
     state: ChargerReducerState) => {
-    let chargerCtx: ChargerContext = {
+    let chargerCtx: ChargerModel = {
       initialize : initialize(dispatch),
       addCharger: addCharger(dispatch),
       getChargers: getChargers(dispatch),
