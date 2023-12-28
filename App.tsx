@@ -6,7 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "./src/screens/HomeScreen";
 import {
   ChargerProvider,
-  ChargerContext,
+  chargerContext,
 } from "./src/context/CreateChargerContext";
 const Stack = createNativeStackNavigator();
 

@@ -1,18 +1,25 @@
-import React from "react";
+import React, { ReducerAction, ReducerState } from "react";
 import openChargeMap from "../api/openChargeMap";
-import createDataContext from "./createDataContext";
+import createDataContext, { ContextBuilder}  from "./createDataContext";
 
 type ChargerInfo = {
   ID: string;
   AddressInfo: { AddressLine1: string; Town: string; StateOrProvince: string };
 };
-type ChargerAction =
+type ChargerReducerAction =
   | { type: "initialize" }
   | { type: "add_charger"; payload: ChargerInfo };
 
-type ChargerState = { chargers: ChargerInfo[] };
+type ChargerReducerState = { chargers: ChargerInfo[] };
 
-const reducer = (state: ChargerState, action: ChargerAction): ChargerState => {
+interface ChargerContext {
+  initialize: () => void;
+  addCharger: (charger: ChargerInfo) => void;
+  getChargers: () => void; 
+  readonly state: ChargerReducerState;
+}
+
+const reducer = (state: ChargerReducerState, action: ChargerReducerAction): ChargerReducerState => {
   switch (action.type) {
     case "initialize":
       return { chargers: [] };
@@ -26,19 +33,19 @@ const reducer = (state: ChargerState, action: ChargerAction): ChargerState => {
   }
 };
 
-const initialize = (dispatch: React.Dispatch<ChargerAction>) => {
+const initialize = (dispatch: React.Dispatch<ChargerReducerAction>) => {
   return () => {
     dispatch({ type: "initialize" });
   };
 };
 
-const addCharger = (dispatch: React.Dispatch<ChargerAction>) => {
+const addCharger = (dispatch: React.Dispatch<ChargerReducerAction>) => {
   return (charger: ChargerInfo) => {
     dispatch({ type: "add_charger", payload: charger });
   };
 };
 
-const getChargers = (dispatch: React.Dispatch<ChargerAction>) => {
+const getChargers = (dispatch: React.Dispatch<ChargerReducerAction>) => {
   return () => {
     openChargeMap
       .get("/poi", {
@@ -74,6 +81,17 @@ const getChargers = (dispatch: React.Dispatch<ChargerAction>) => {
   };
 };
 
-export const { Provider: ChargerProvider, Context: ChargerContext } = createDataContext(reducer,
-    { initialize, addCharger, getChargers}, 
-    {chargers: []});
+let builder: ContextBuilder<ChargerReducerAction, ChargerReducerState, ChargerContext> = {
+  build: (dispatch: React.Dispatch<ChargerReducerAction>, 
+    state: ChargerReducerState) => {
+    let chargerCtx: ChargerContext = {
+      initialize : initialize(dispatch),
+      addCharger: addCharger(dispatch),
+      getChargers: getChargers(dispatch),
+      state
+    };
+    return chargerCtx;
+  }
+};
+
+export const { provider: ChargerProvider, context: chargerContext } = createDataContext(reducer, builder , {chargers: []});
