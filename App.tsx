@@ -1,18 +1,25 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useReducer } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {
+  createNativeStackNavigator,
+  NativeStackScreenProps,
+} from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "./src/screens/HomeScreen";
+import FindChargersScreen from "./src/screens/FindChargersScreen";
 import { ChargerProvider, ChargerContext } from "./src/context/ChargerContext";
-const Stack = createNativeStackNavigator();
+import { RootStackParamList } from "./src/screens/Props";
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const App = () => {
   return (
     <ChargerProvider>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="ChargeFinder" component={HomeScreen} />
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="FindChargers" component={FindChargersScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </ChargerProvider>

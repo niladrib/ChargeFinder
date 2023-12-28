@@ -1,22 +1,29 @@
 import React, { useContext } from "react";
 import { View, StyleSheet, Text, Button } from "react-native";
-import openChargeMap from "../api/openChargeMap";
-import { ChargerContext } from "../context/ChargerContext";
-import Map from "../components/Map";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { HomeProps } from "./Props";
 
-const HomeScreen = () => {
-  const context = useContext(ChargerContext);
-  console.log(`chargers:${JSON.stringify(context.chargerState?.chargers)}`);
+const HomeScreen = ({ navigation }: HomeProps) => {
   return (
-    <View>
-      <Map />
+    <View style={styles.container}>
+      <Text>
+        In the next screen we will ask for location permissions. We need to
+        locate you to be able to find chargers near you.
+      </Text>
       <Button
         color="#0064ff"
-        title="Find Chargers Near Me"
-        onPress={context.getChargers}
+        title="Proceed"
+        onPress={() => navigation.navigate("FindChargers")}
       />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    marginHorizontal: 5,
+    marginVertical: 20,
+  },
+});
 
 export default HomeScreen;
