@@ -4,8 +4,8 @@ import MapView, { Circle } from "react-native-maps";
 import { LocationContext } from "../context/LocationContext";
 
 const Map = () => {
-  const { locationState } = useContext(LocationContext);
-  if (locationState?.currentLocation === undefined) {
+  const locationModel = useContext(LocationContext);
+  if (locationModel?.locationState.currentLocation === undefined) {
     console.log(`No current location`);
     return <View style={styles.defaultView} />;
   }
@@ -13,16 +13,16 @@ const Map = () => {
     <MapView
       style={styles.map}
       initialRegion={{
-        latitude: locationState.currentLocation.latitude,
-        longitude: locationState.currentLocation.longitude,
+        latitude: locationModel?.locationState.currentLocation.latitude,
+        longitude: locationModel?.locationState.currentLocation.longitude,
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
       }}
     >
       <Circle
         center={{
-          latitude: locationState.currentLocation.latitude,
-          longitude: locationState.currentLocation.longitude,
+          latitude: locationModel?.locationState.currentLocation.latitude,
+          longitude: locationModel?.locationState.currentLocation.longitude,
         }}
         radius={30}
         strokeColor="rgba(0, 100, 255, 1.0)"

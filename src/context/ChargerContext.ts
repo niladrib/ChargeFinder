@@ -29,10 +29,15 @@ const reducer = (
   }
 };
 
+type CurrentLocation = {
+  latitude: number;
+  longitude: number;
+};
+
 interface ChargerModel {
   initialize: () => void;
   addCharger: (charger: ChargerInfo) => void;
-  getChargers: () => void;
+  getChargers: (currentLoc: CurrentLocation) => void;
   readonly chargerState: ChargerReducerState;
 }
 
@@ -49,7 +54,7 @@ const addCharger = (dispatch: React.Dispatch<ChargerReducerAction>) => {
 };
 
 const getChargers = (dispatch: React.Dispatch<ChargerReducerAction>) => {
-  return () => {
+  return (currentLoc: CurrentLocation) => {
     openChargeMap
       .get("/poi", {
         params: {
@@ -59,8 +64,10 @@ const getChargers = (dispatch: React.Dispatch<ChargerReducerAction>) => {
           verbose: false,
           distance: 10,
           distanceunit: "miles",
-          latitude: 39.19005300900668,
-          longitude: -120.96667310680074,
+          // latitude: 39.19005300900668,
+          // longitude: -120.96667310680074,
+          latitude: currentLoc.latitude,
+          longitude: currentLoc.longitude,
         },
       })
       .then((response): void => {

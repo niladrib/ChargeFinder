@@ -10,19 +10,22 @@ import HomeScreen from "./src/screens/HomeScreen";
 import FindChargersScreen from "./src/screens/FindChargersScreen";
 import { ChargerProvider, ChargerContext } from "./src/context/ChargerContext";
 import { RootStackParamList } from "./src/screens/Props";
+import { LocationProvider } from "./src/context/LocationContext";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const App = () => {
   return (
-    <ChargerProvider>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="FindChargers" component={FindChargersScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </ChargerProvider>
+    <LocationProvider>
+      <ChargerProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="FindChargers" component={FindChargersScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ChargerProvider>
+    </LocationProvider>
   );
 };
 

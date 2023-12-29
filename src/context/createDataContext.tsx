@@ -13,7 +13,7 @@ export default <Action, State, Model>(
   modelBuilder: ModelBuilder<Action, State, Model>,
   defaultValue: State
 ) => {
-  const context = React.createContext<Partial<Model>>({});
+  const context = React.createContext<Model | null>(null);
 
   const provider = ({ children }: Props) => {
     const [state, dispatch] = useReducer(reducer, defaultValue);

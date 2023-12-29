@@ -31,7 +31,9 @@ interface LocationModel {
 }
 
 const addLocation = (dispatch: React.Dispatch<LocationReducerAction>) => {
-  return (location: LocationInfo) => {};
+  return (location: LocationInfo) => {
+    dispatch({ type: "add_location", payload: location });
+  };
 };
 
 let modelBuilder: ContextBuilder<
