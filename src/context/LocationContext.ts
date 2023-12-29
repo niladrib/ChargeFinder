@@ -54,5 +54,6 @@ let modelBuilder: ContextBuilder<
   },
 };
 
+export type { LocationModel };
 export const { provider: LocationProvider, context: LocationContext } =
   createDataContext(reducer, modelBuilder, {});

@@ -4,14 +4,24 @@ import createDataContext, { ContextBuilder } from "./createDataContext";
 
 type ChargerInfo = {
   ID: string;
-  AddressInfo: { AddressLine1: string; Town: string; StateOrProvince: string };
+  AddressInfo: {
+    AddressLine1: string;
+    Town: string;
+    StateOrProvince: string;
+    Latitude: number;
+    Longitude: number;
+  };
 };
 
 type ChargerReducerAction =
   | { type: "initialize" }
-  | { type: "add_charger"; payload: ChargerInfo };
+  | { type: "add_charger"; payload: ChargerInfo }
+  | { type: "select_charger"; payload: ChargerInfo };
 
-type ChargerReducerState = { chargers: ChargerInfo[] };
+type ChargerReducerState = {
+  chargers: ChargerInfo[];
+  selectedCharger?: ChargerInfo;
+};
 
 const reducer = (
   state: ChargerReducerState,
@@ -23,6 +33,9 @@ const reducer = (
 
     case "add_charger":
       return { chargers: [...state.chargers, action.payload] };
+
+    case "select_charger":
+      return { ...state, selectedCharger: action.payload };
 
     default:
       throw new Error("unhandled Charger Action");
@@ -36,7 +49,7 @@ type CurrentLocation = {
 
 interface ChargerModel {
   initialize: () => void;
-  addCharger: (charger: ChargerInfo) => void;
+  selectCharger: (charger: ChargerInfo) => void;
   getChargers: (currentLoc: CurrentLocation) => void;
   readonly chargerState: ChargerReducerState;
 }
@@ -44,6 +57,12 @@ interface ChargerModel {
 const initialize = (dispatch: React.Dispatch<ChargerReducerAction>) => {
   return () => {
     dispatch({ type: "initialize" });
+  };
+};
+
+const selectCharger = (dispatch: React.Dispatch<ChargerReducerAction>) => {
+  return (charger: ChargerInfo) => {
+    dispatch({ type: "select_charger", payload: charger });
   };
 };
 
@@ -62,7 +81,7 @@ const getChargers = (dispatch: React.Dispatch<ChargerReducerAction>) => {
           maxresults: 100,
           compact: true,
           verbose: false,
-          distance: 10,
+          distance: 1,
           distanceunit: "miles",
           // latitude: 39.19005300900668,
           // longitude: -120.96667310680074,
@@ -74,13 +93,25 @@ const getChargers = (dispatch: React.Dispatch<ChargerReducerAction>) => {
         // console.log(`Got response=${JSON.stringify(response.data)}`);
         for (const {
           ID,
-          AddressInfo: { AddressLine1, Town, StateOrProvince },
+          AddressInfo: {
+            AddressLine1,
+            Town,
+            StateOrProvince,
+            Latitude,
+            Longitude,
+          },
         } of response.data) {
           dispatch({
             type: "add_charger",
             payload: {
               ID,
-              AddressInfo: { AddressLine1, Town, StateOrProvince },
+              AddressInfo: {
+                AddressLine1,
+                Town,
+                StateOrProvince,
+                Latitude,
+                Longitude,
+              },
             },
           });
         }
@@ -103,7 +134,7 @@ let modelBuilder: ContextBuilder<
     // console.log(`Building Model`);
     let model: ChargerModel = {
       initialize: initialize(dispatch),
-      addCharger: addCharger(dispatch),
+      selectCharger: selectCharger(dispatch),
       getChargers: getChargers(dispatch),
       chargerState: state,
     };

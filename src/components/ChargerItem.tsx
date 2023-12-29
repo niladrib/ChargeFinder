@@ -1,6 +1,7 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useContext } from "react";
 import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
 import { Button } from "@rneui/base";
+import { ChargerContext } from "../context/ChargerContext";
 
 type ChargerItemProps = {
   charger: {
@@ -9,6 +10,8 @@ type ChargerItemProps = {
       AddressLine1: string;
       Town: string;
       StateOrProvince: string;
+      Latitude: number;
+      Longitude: number;
     };
   };
 };
@@ -16,12 +19,26 @@ type ChargerItemProps = {
 const ChargerItem: FunctionComponent<ChargerItemProps> = ({
   charger: {
     ID,
-    AddressInfo: { AddressLine1, Town, StateOrProvince },
+    AddressInfo: { AddressLine1, Town, StateOrProvince, Latitude, Longitude },
   },
 }) => {
+  const chargerModel = useContext(ChargerContext);
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          chargerModel?.selectCharger({
+            ID,
+            AddressInfo: {
+              AddressLine1,
+              Town,
+              StateOrProvince,
+              Latitude,
+              Longitude,
+            },
+          })
+        }
+      >
         <Text>{AddressLine1}</Text>
         <Text>{Town}</Text>
         <Text>{StateOrProvince}</Text>

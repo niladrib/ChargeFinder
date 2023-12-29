@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Button, FlatList } from "react-native";
+import { View, Button, FlatList, Text } from "react-native";
 import { ChargerContext } from "../context/ChargerContext";
 import Map from "../components/Map";
 import {
@@ -9,7 +9,7 @@ import {
   LocationSubscription,
 } from "expo-location";
 import { FindChargersProps } from "./Props";
-import { LocationContext } from "../context/LocationContext";
+import { LocationContext, LocationModel } from "../context/LocationContext";
 import ChargerItem from "../components/ChargerItem";
 
 const FindChargersScreen = ({ navigation }: FindChargersProps) => {
@@ -49,6 +49,7 @@ const FindChargersScreen = ({ navigation }: FindChargersProps) => {
   useEffect(() => {
     const focusUnsubscribe = navigation.addListener("focus", () => {
       console.log(`FindChargersScreen in focus`);
+      chargerModel?.initialize();
       startTracking();
     });
     const blurUnsubscribe = navigation.addListener("beforeRemove", () => {
@@ -68,7 +69,7 @@ const FindChargersScreen = ({ navigation }: FindChargersProps) => {
   );
   return (
     <View>
-      <Map />
+      {getMap()}
       <Button
         color="#0064ff"
         title="Find Chargers Near Me"
@@ -80,6 +81,12 @@ const FindChargersScreen = ({ navigation }: FindChargersProps) => {
           }
         }}
       />
+      {chargerModel!.chargerState.chargers.length !== 0 ? (
+        <Text style={{ fontWeight: "bold" }}>
+          {" "}
+          Tap on address to see location on Map
+        </Text>
+      ) : null}
       <FlatList
         data={chargerModel!.chargerState.chargers}
         renderItem={({ item }) => <ChargerItem charger={item} />}
@@ -87,6 +94,32 @@ const FindChargersScreen = ({ navigation }: FindChargersProps) => {
       />
     </View>
   );
+
+  function getMap() {
+    if (typeof chargerModel!.chargerState.selectedCharger !== "undefined") {
+      //If the user has selected a charger show that on the map first
+      return (
+        <Map
+          currentLocation={{
+            latitude:
+              chargerModel!.chargerState.selectedCharger.AddressInfo.Latitude,
+            longitude:
+              chargerModel!.chargerState.selectedCharger.AddressInfo.Longitude,
+          }}
+        />
+      );
+    } else if (
+      typeof locationModel!.locationState.currentLocation !== "undefined"
+    ) {
+      //Otherwise show the user's curent location on the map
+      return (
+        <Map currentLocation={locationModel!.locationState.currentLocation} />
+      );
+    } else {
+      //Else show a blank component
+      return <Map currentLocation={{}} />;
+    }
+  }
 };
 
 export default FindChargersScreen;

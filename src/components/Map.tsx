@@ -1,11 +1,20 @@
-import React, { useContext } from "react";
+import React, { FunctionComponent, useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import MapView, { Circle } from "react-native-maps";
 import { LocationContext } from "../context/LocationContext";
 
-const Map = () => {
-  const locationModel = useContext(LocationContext);
-  if (locationModel?.locationState.currentLocation === undefined) {
+type MapProps = {
+  currentLocation: {
+    latitude?: number;
+    longitude?: number;
+  };
+};
+
+const Map: FunctionComponent<MapProps> = ({
+  currentLocation: { latitude, longitude },
+}) => {
+  // const locationModel = useContext(LocationContext);
+  if (typeof latitude === "undefined" || typeof longitude === "undefined") {
     console.log(`No current location`);
     return <View style={styles.defaultView} />;
   }
@@ -13,16 +22,20 @@ const Map = () => {
     <MapView
       style={styles.map}
       initialRegion={{
-        latitude: locationModel?.locationState.currentLocation.latitude,
-        longitude: locationModel?.locationState.currentLocation.longitude,
+        // latitude: locationModel?.locationState.currentLocation.latitude,
+        // longitude: locationModel?.locationState.currentLocation.longitude,
+        latitude,
+        longitude,
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
       }}
     >
       <Circle
         center={{
-          latitude: locationModel?.locationState.currentLocation.latitude,
-          longitude: locationModel?.locationState.currentLocation.longitude,
+          // latitude: locationModel?.locationState.currentLocation.latitude,
+          // longitude: locationModel?.locationState.currentLocation.longitude,
+          latitude,
+          longitude,
         }}
         radius={30}
         strokeColor="rgba(0, 100, 255, 1.0)"
@@ -30,6 +43,10 @@ const Map = () => {
       />
     </MapView>
   );
+};
+
+Map.defaultProps = {
+  currentLocation: {},
 };
 
 const styles = StyleSheet.create({
