@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Button } from "react-native";
+import { View, Button, FlatList } from "react-native";
 import { ChargerContext } from "../context/ChargerContext";
 import Map from "../components/Map";
 import {
@@ -10,6 +10,7 @@ import {
 } from "expo-location";
 import { FindChargersProps } from "./Props";
 import { LocationContext } from "../context/LocationContext";
+import ChargerItem from "../components/ChargerItem";
 
 const FindChargersScreen = ({ navigation }: FindChargersProps) => {
   const [err, setErr] = useState<any>(null);
@@ -78,6 +79,11 @@ const FindChargersScreen = ({ navigation }: FindChargersProps) => {
             chargerModel?.getChargers(currLoc);
           }
         }}
+      />
+      <FlatList
+        data={chargerModel!.chargerState.chargers}
+        renderItem={({ item }) => <ChargerItem charger={item} />}
+        keyExtractor={(item) => item.ID}
       />
     </View>
   );
