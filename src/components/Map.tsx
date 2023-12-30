@@ -13,7 +13,6 @@ type MapProps = {
 const Map: FunctionComponent<MapProps> = ({
   currentLocation: { latitude, longitude },
 }) => {
-  // const locationModel = useContext(LocationContext);
   if (typeof latitude === "undefined" || typeof longitude === "undefined") {
     // console.log(`No current location`);
     return <View style={styles.defaultView} />;
@@ -22,8 +21,6 @@ const Map: FunctionComponent<MapProps> = ({
     <MapView
       style={styles.map}
       initialRegion={{
-        // latitude: locationModel?.locationState.currentLocation.latitude,
-        // longitude: locationModel?.locationState.currentLocation.longitude,
         latitude,
         longitude,
         latitudeDelta: 0.01,
@@ -32,8 +29,6 @@ const Map: FunctionComponent<MapProps> = ({
     >
       <Circle
         center={{
-          // latitude: locationModel?.locationState.currentLocation.latitude,
-          // longitude: locationModel?.locationState.currentLocation.longitude,
           latitude,
           longitude,
         }}

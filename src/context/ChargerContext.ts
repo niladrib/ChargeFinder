@@ -104,7 +104,7 @@ const getChargers = (dispatch: React.Dispatch<ChargerReducerAction>) => {
           maxresults: 100,
           compact: true,
           verbose: false,
-          distance: 1,
+          distance: 10,
           distanceunit: "miles",
           // latitude: 39.19005300900668,
           // longitude: -120.96667310680074,

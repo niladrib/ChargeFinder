@@ -10,5 +10,3 @@ export type FindChargersProps = NativeStackScreenProps<
   RootStackParamList,
   "FindChargers"
 >;
-
-// export { RootStackParamList, HomeProps };
