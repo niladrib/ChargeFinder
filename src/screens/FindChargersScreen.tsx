@@ -83,8 +83,7 @@ const FindChargersScreen = ({ navigation }: FindChargersProps) => {
       />
       {chargerModel!.chargerState.chargers.length !== 0 ? (
         <Text style={{ fontWeight: "bold" }}>
-          {" "}
-          Tap on address to see location on Map
+          Tap on address to see location on Map. Tap "Start" to start charging.
         </Text>
       ) : null}
       <FlatList

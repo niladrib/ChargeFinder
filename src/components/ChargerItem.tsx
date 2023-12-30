@@ -27,7 +27,7 @@ const ChargerItem: FunctionComponent<ChargerItemProps> = ({
     <View style={styles.container}>
       <TouchableOpacity
         onPress={() =>
-          chargerModel?.selectCharger({
+          chargerModel!.selectCharger({
             ID,
             AddressInfo: {
               AddressLine1,
@@ -44,7 +44,18 @@ const ChargerItem: FunctionComponent<ChargerItemProps> = ({
         <Text>{StateOrProvince}</Text>
       </TouchableOpacity>
       <View>
-        <Button title="Select" />
+        <Button
+          title="Start"
+          onPress={async () => {
+            console.log(`Selected charger=${ID}`);
+            if (chargerModel === null) {
+              return;
+            }
+            try {
+              const status = await chargerModel.startCharging(ID);
+            } catch (err) {}
+          }}
+        />
       </View>
     </View>
   );

@@ -1,6 +1,7 @@
 import React from "react";
 import openChargeMap from "../api/openChargeMap";
 import createDataContext, { ContextBuilder } from "./createDataContext";
+import evEnergy from "../api/evEnergy";
 
 type ChargerInfo = {
   ID: string;
@@ -51,6 +52,7 @@ interface ChargerModel {
   initialize: () => void;
   selectCharger: (charger: ChargerInfo) => void;
   getChargers: (currentLoc: CurrentLocation) => void;
+  startCharging: (chargerID: string) => Promise<boolean>;
   readonly chargerState: ChargerReducerState;
 }
 
@@ -69,6 +71,27 @@ const selectCharger = (dispatch: React.Dispatch<ChargerReducerAction>) => {
 const addCharger = (dispatch: React.Dispatch<ChargerReducerAction>) => {
   return (charger: ChargerInfo) => {
     dispatch({ type: "add_charger", payload: charger });
+  };
+};
+
+const startCharging = (dispatch: React.Dispatch<ChargerReducerAction>) => {
+  return async (chargerID: string): Promise<boolean> => {
+    try {
+      const resp = await evEnergy.post("/chargingsession", {
+        user: 1,
+        car_id: 1,
+        charger_id: chargerID,
+      });
+      console.log(`startCharging resp=${JSON.stringify(resp)}`);
+      if (resp.status === 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (err) {
+      console.log(`startCharging err=${err}`);
+      return false;
+    }
   };
 };
 
@@ -136,6 +159,7 @@ let modelBuilder: ContextBuilder<
       initialize: initialize(dispatch),
       selectCharger: selectCharger(dispatch),
       getChargers: getChargers(dispatch),
+      startCharging: startCharging(dispatch),
       chargerState: state,
     };
     return model;
