@@ -15,7 +15,7 @@ const Map: FunctionComponent<MapProps> = ({
 }) => {
   // const locationModel = useContext(LocationContext);
   if (typeof latitude === "undefined" || typeof longitude === "undefined") {
-    console.log(`No current location`);
+    // console.log(`No current location`);
     return <View style={styles.defaultView} />;
   }
   return (

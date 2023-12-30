@@ -68,12 +68,6 @@ const selectCharger = (dispatch: React.Dispatch<ChargerReducerAction>) => {
   };
 };
 
-const addCharger = (dispatch: React.Dispatch<ChargerReducerAction>) => {
-  return (charger: ChargerInfo) => {
-    dispatch({ type: "add_charger", payload: charger });
-  };
-};
-
 const addChargers = (dispatch: React.Dispatch<ChargerReducerAction>) => {
   return (chargers: ChargerInfo[]) => {
     dispatch({ type: "add_chargers", payload: chargers });
@@ -88,14 +82,14 @@ const startCharging = (dispatch: React.Dispatch<ChargerReducerAction>) => {
         car_id: 1,
         charger_id: chargerID,
       });
-      console.log(`startCharging resp=${JSON.stringify(resp)}`);
+      // console.log(`startCharging resp=${JSON.stringify(resp)}`);
       if (resp.status === 200) {
         return true;
       } else {
         return false;
       }
     } catch (err) {
-      console.log(`startCharging err=${err}`);
+      // console.log(`startCharging err=${err}`);
       return false;
     }
   };
@@ -169,9 +163,9 @@ const getChargers = (dispatch: React.Dispatch<ChargerReducerAction>) => {
             };
           }
         );
-        console.log(
-          `dispatching chargersToAdd=${JSON.stringify(chargersToAdd)}`
-        );
+        // console.log(
+        //   `dispatching chargersToAdd=${JSON.stringify(chargersToAdd)}`
+        // );
         dispatch({
           type: "add_chargers",
           payload: chargersToAdd,

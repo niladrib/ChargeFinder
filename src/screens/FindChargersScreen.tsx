@@ -18,11 +18,11 @@ const FindChargersScreen = ({ navigation }: FindChargersProps) => {
     null
   );
   const locationModel = useContext(LocationContext);
-  console.log(
-    `FindChargersScreen curr loc=${
-      locationModel!.locationState.currentLocation
-    }`
-  );
+  //   console.log(
+  //     `FindChargersScreen curr loc=${
+  //       locationModel!.locationState.currentLocation
+  //     }`
+  //   );
   const startTracking = async () => {
     try {
       await requestForegroundPermissionsAsync();
@@ -33,27 +33,26 @@ const FindChargersScreen = ({ navigation }: FindChargersProps) => {
           distanceInterval: 10,
         },
         (location) => {
-          console.log(`location=${JSON.stringify(location)}`);
+          //   console.log(`location=${JSON.stringify(location)}`);
           const latitude = location.coords.latitude;
           const longitude = location.coords.longitude;
-          console.log(`locationModel2=${locationModel}`);
           locationModel!.addLocation({ latitude, longitude });
         }
       );
       setSubscriber(sub);
-      console.log("received location permissions");
+      //   console.log("received location permissions");
     } catch (error) {
       setErr(error);
     }
   };
   useEffect(() => {
     const focusUnsubscribe = navigation.addListener("focus", () => {
-      console.log(`FindChargersScreen in focus`);
+      //   console.log(`FindChargersScreen in focus`);
       chargerModel?.initialize();
       startTracking();
     });
     const blurUnsubscribe = navigation.addListener("beforeRemove", () => {
-      console.log(`FindChargersScreen in beforeRemove`);
+      //   console.log(`FindChargersScreen in beforeRemove`);
       subscriber?.remove();
       setSubscriber(null);
     });
@@ -63,10 +62,10 @@ const FindChargersScreen = ({ navigation }: FindChargersProps) => {
     };
   }, [navigation]);
   const chargerModel = useContext(ChargerContext);
-  console.log(`chargerModel=${chargerModel}`);
-  console.log(
-    `chargers:${JSON.stringify(chargerModel?.chargerState?.chargers)}`
-  );
+  //   console.log(`chargerModel=${chargerModel}`);
+  //   console.log(
+  //     `chargers:${JSON.stringify(chargerModel?.chargerState?.chargers)}`
+  //   );
   return (
     <View>
       {getMap()}
@@ -75,7 +74,7 @@ const FindChargersScreen = ({ navigation }: FindChargersProps) => {
         title="Find Chargers Near Me"
         onPress={() => {
           const currLoc = locationModel!.locationState.currentLocation;
-          console.log(`Triggering charger search with loc=${currLoc}`);
+          //   console.log(`Triggering charger search with loc=${currLoc}`);
           if (currLoc !== undefined) {
             chargerModel?.getChargers(currLoc);
           }

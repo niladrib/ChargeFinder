@@ -47,7 +47,7 @@ const ChargerItem: FunctionComponent<ChargerItemProps> = ({
         <Button
           title="Start"
           onPress={async () => {
-            console.log(`Selected charger=${ID}`);
+            // console.log(`Selected charger=${ID}`);
             if (chargerModel === null) {
               return;
             }
