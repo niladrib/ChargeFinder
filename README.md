@@ -34,24 +34,109 @@ The View Models encapsulate the business logic in the app. Each View Model objec
 5.  Modified state flows back to the UI via Context and Provider.
 
 ### Notes on extensibility
-To create more View Models, do the following.
+To create a new View Models do the following.
 
-You would define the type/interface for your View Model state.
+Define the type/interface for your View Model state.
+```typescript
+type ChargerReducerState = {
+  chargers: ChargerInfo[];
+  selectedCharger?: ChargerInfo;
+};
+```
 
+Define the types/interfaces for your reducer and reducer actions.
+```typescript
+type ChargerReducerAction =
+  | { type: "initialize" }
+  | { type: "add_chargers"; payload: ChargerInfo[] }
+  | { type: "select_charger"; payload: ChargerInfo };
 
-You would define the types/interfaces for your reducer and reducer state.
+const reducer = (
+  state: ChargerReducerState,
+  action: ChargerReducerAction
+): ChargerReducerState => {
+  switch (action.type) {
+    case "initialize":
+      return { chargers: [] };
 
-You would define the type/interface for your View Model object.
+    case "add_chargers":
+      return { chargers: [...action.payload] };
 
-You would create a builder object that can build the View Model. This is needed so that we don't have to expose the underlying reducer and dispatcher, which are implementation details of your View Model,  to the View. 
+    case "select_charger":
+      return { ...state, selectedCharger: action.payload };
 
-You would pass the reducer, model builder, and the default state for your model to `createDataContext()` and get a Context and a Provider that you can use. 
+    default:
+      throw new Error("unhandled Charger Action");
+  }
+};
+```
 
-You would wrap your App with the Provider.
+Define the type/interface for your View Model object.
+```typescript
+interface ChargerViewModel {
+  initialize: () => void;
+  selectCharger: (charger: ChargerInfo) => void;
+  getChargers: (currentLoc: CurrentLocation) => void;
+  startCharging: (chargerID: string) => Promise<boolean>;
+  readonly chargerState: ChargerReducerState;
+}
+```
 
-You would use the Context to access your View Model in your components.
+Create a builder object that can build the View Model. This is needed so that we don't have to expose the underlying reducer and dispatcher, which are implementation details of your View Model,  to the View. 
+```typescript
+let modelBuilder: ContextBuilder<
+  ChargerReducerAction,
+  ChargerReducerState,
+  ChargerViewModel
+> = {
+  build: (
+    dispatch: React.Dispatch<ChargerReducerAction>,
+    state: ChargerReducerState
+  ) => {
+    // console.log(`Building Model`);
+    let model: ChargerViewModel = {
+      initialize: initialize(dispatch),
+      selectCharger: selectCharger(dispatch),
+      getChargers: getChargers(dispatch),
+      startCharging: startCharging(dispatch),
+      chargerState: state,
+    };
+    return model;
+  },
+};
+```
 
+Pass the reducer, model builder, and the default state for your model to `createDataContext()` and get a Context and a Provider that you can use. 
+```typescript
+export const { provider: ChargerProvider, context: ChargerContext } =
+  createDataContext(reducer, modelBuilder, { chargers: [] });
+```
 
+Wrap your App with the Provider.
+```typescript
+const App = () => {
+  return (
+    <LocationProvider>
+      <ChargerProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="FindChargers" component={FindChargersScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ChargerProvider>
+    </LocationProvider>
+  );
+};
+```
+
+Use the Context to access your View Model in your components.
+```typescript
+import { ChargerContext } from "../context/ChargerContext";
+
+const chargerModel = useContext(ChargerContext);
+```
+## References
 
 
 
