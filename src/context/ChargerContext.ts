@@ -113,30 +113,6 @@ const getChargers = (dispatch: React.Dispatch<ChargerReducerAction>) => {
         },
       })
       .then((response): void => {
-        // for (const {
-        //   ID,
-        //   AddressInfo: {
-        //     AddressLine1,
-        //     Town,
-        //     StateOrProvince,
-        //     Latitude,
-        //     Longitude,
-        //   },
-        // } of response.data) {
-        //   dispatch({
-        //     type: "add_charger",
-        //     payload: {
-        //       ID,
-        //       AddressInfo: {
-        //         AddressLine1,
-        //         Town,
-        //         StateOrProvince,
-        //         Latitude,
-        //         Longitude,
-        //       },
-        //     },
-        //   });
-        // }
         const chargersToAdd = response.data.map(
           (
             {
