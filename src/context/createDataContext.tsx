@@ -4,13 +4,13 @@ interface Props {
   children?: ReactNode;
 }
 
-interface ModelBuilder<Action, State, Model> {
+interface ViewModelBuilder<Action, State, Model> {
   build: (dispatch: React.Dispatch<Action>, state: State) => Model;
 }
 
 export default <Action, State, Model>(
   reducer: (state: State, action: Action) => State,
-  modelBuilder: ModelBuilder<Action, State, Model>,
+  modelBuilder: ViewModelBuilder<Action, State, Model>,
   defaultValue: State
 ) => {
   const context = React.createContext<Model | null>(null);
@@ -24,4 +24,4 @@ export default <Action, State, Model>(
   return { context, provider };
 };
 
-export { ModelBuilder as ContextBuilder };
+export { ViewModelBuilder as ContextBuilder };

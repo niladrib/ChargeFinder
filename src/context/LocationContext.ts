@@ -25,7 +25,7 @@ const reducer = (
   }
 };
 
-interface LocationModel {
+interface LocationViewModel {
   addLocation: (location: LocationInfo) => void;
   readonly locationState: LocationReducerState;
 }
@@ -39,14 +39,14 @@ const addLocation = (dispatch: React.Dispatch<LocationReducerAction>) => {
 let modelBuilder: ContextBuilder<
   LocationReducerAction,
   LocationReducerState,
-  LocationModel
+  LocationViewModel
 > = {
   build: (
     dispatch: React.Dispatch<LocationReducerAction>,
     state: LocationReducerState
   ) => {
     // console.log(`Building Model`);
-    let model: LocationModel = {
+    let model: LocationViewModel = {
       addLocation: addLocation(dispatch),
       locationState: state,
     };
@@ -54,6 +54,6 @@ let modelBuilder: ContextBuilder<
   },
 };
 
-export type { LocationModel };
+export type { LocationViewModel as LocationModel };
 export const { provider: LocationProvider, context: LocationContext } =
   createDataContext(reducer, modelBuilder, {});

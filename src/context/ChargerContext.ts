@@ -48,7 +48,7 @@ type CurrentLocation = {
   longitude: number;
 };
 
-interface ChargerModel {
+interface ChargerViewModel {
   initialize: () => void;
   selectCharger: (charger: ChargerInfo) => void;
   getChargers: (currentLoc: CurrentLocation) => void;
@@ -180,14 +180,14 @@ const getChargers = (dispatch: React.Dispatch<ChargerReducerAction>) => {
 let modelBuilder: ContextBuilder<
   ChargerReducerAction,
   ChargerReducerState,
-  ChargerModel
+  ChargerViewModel
 > = {
   build: (
     dispatch: React.Dispatch<ChargerReducerAction>,
     state: ChargerReducerState
   ) => {
     // console.log(`Building Model`);
-    let model: ChargerModel = {
+    let model: ChargerViewModel = {
       initialize: initialize(dispatch),
       selectCharger: selectCharger(dispatch),
       getChargers: getChargers(dispatch),
