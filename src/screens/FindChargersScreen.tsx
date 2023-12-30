@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Button, FlatList, Text } from "react-native";
+import { View, Button, FlatList, Text, Alert } from "react-native";
 import { ChargerContext } from "../context/ChargerContext";
 import Map from "../components/Map";
 import {
@@ -42,6 +42,12 @@ const FindChargersScreen = ({ navigation }: FindChargersProps) => {
       setSubscriber(sub);
       //   console.log("received location permissions");
     } catch (error) {
+      console.log(`location permission error${error}`);
+      Alert.alert(
+        "Error",
+        "We need your permission to find your location. Please give ChargeFinder access to your location in Settings.",
+        [{ text: "OK", onPress: () => navigation.goBack() }]
+      );
       setErr(error);
     }
   };
