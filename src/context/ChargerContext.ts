@@ -16,7 +16,7 @@ type ChargerInfo = {
 
 type ChargerReducerAction =
   | { type: "initialize" }
-  | { type: "add_charger"; payload: ChargerInfo }
+  | { type: "add_chargers"; payload: ChargerInfo[] }
   | { type: "select_charger"; payload: ChargerInfo };
 
 type ChargerReducerState = {
@@ -32,8 +32,8 @@ const reducer = (
     case "initialize":
       return { chargers: [] };
 
-    case "add_charger":
-      return { chargers: [...state.chargers, action.payload] };
+    case "add_chargers":
+      return { chargers: [...action.payload] };
 
     case "select_charger":
       return { ...state, selectedCharger: action.payload };
@@ -71,6 +71,12 @@ const selectCharger = (dispatch: React.Dispatch<ChargerReducerAction>) => {
 const addCharger = (dispatch: React.Dispatch<ChargerReducerAction>) => {
   return (charger: ChargerInfo) => {
     dispatch({ type: "add_charger", payload: charger });
+  };
+};
+
+const addChargers = (dispatch: React.Dispatch<ChargerReducerAction>) => {
+  return (chargers: ChargerInfo[]) => {
+    dispatch({ type: "add_chargers", payload: chargers });
   };
 };
 
@@ -113,20 +119,33 @@ const getChargers = (dispatch: React.Dispatch<ChargerReducerAction>) => {
         },
       })
       .then((response): void => {
-        // console.log(`Got response=${JSON.stringify(response.data)}`);
-        for (const {
-          ID,
-          AddressInfo: {
-            AddressLine1,
-            Town,
-            StateOrProvince,
-            Latitude,
-            Longitude,
-          },
-        } of response.data) {
-          dispatch({
-            type: "add_charger",
-            payload: {
+        // for (const {
+        //   ID,
+        //   AddressInfo: {
+        //     AddressLine1,
+        //     Town,
+        //     StateOrProvince,
+        //     Latitude,
+        //     Longitude,
+        //   },
+        // } of response.data) {
+        //   dispatch({
+        //     type: "add_charger",
+        //     payload: {
+        //       ID,
+        //       AddressInfo: {
+        //         AddressLine1,
+        //         Town,
+        //         StateOrProvince,
+        //         Latitude,
+        //         Longitude,
+        //       },
+        //     },
+        //   });
+        // }
+        const chargersToAdd = response.data.map(
+          (
+            {
               ID,
               AddressInfo: {
                 AddressLine1,
@@ -135,9 +154,28 @@ const getChargers = (dispatch: React.Dispatch<ChargerReducerAction>) => {
                 Latitude,
                 Longitude,
               },
-            },
-          });
-        }
+            }: ChargerInfo,
+            index: number
+          ) => {
+            return {
+              ID,
+              AddressInfo: {
+                AddressLine1,
+                Town,
+                StateOrProvince,
+                Latitude,
+                Longitude,
+              },
+            };
+          }
+        );
+        console.log(
+          `dispatching chargersToAdd=${JSON.stringify(chargersToAdd)}`
+        );
+        dispatch({
+          type: "add_chargers",
+          payload: chargersToAdd,
+        });
       })
       .catch((err): void => {
         console.log(`Got error when getting POIs=${err}`);
