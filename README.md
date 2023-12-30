@@ -105,7 +105,7 @@ let modelBuilder: ContextBuilder<
 };
 ```
 
-Pass the reducer, model builder, and the default state for your model to `createDataContext()` and get a Context and a Provider that you can use. 
+Pass the reducer, model builder, and the default state for your model to `createDataContext()` and get back a Context and a Provider that you can use. 
 ```typescript
 export const { provider: ChargerProvider, context: ChargerContext } =
   createDataContext(reducer, modelBuilder, { chargers: [] });
