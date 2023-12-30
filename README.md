@@ -82,7 +82,7 @@ interface ChargerViewModel {
 }
 ```
 
-Create a builder object that can build the View Model. This is needed so that we don't have to expose the underlying reducer and dispatcher, which are implementation details of your View Model,  to the View. 
+Create a builder object that can build the View Model. This is needed so that we don't have to expose the underlying reducer and dispatcher, which are implementation details of our View Model,  to the View. 
 ```typescript
 let modelBuilder: ContextBuilder<
   ChargerReducerAction,
@@ -93,7 +93,6 @@ let modelBuilder: ContextBuilder<
     dispatch: React.Dispatch<ChargerReducerAction>,
     state: ChargerReducerState
   ) => {
-    // console.log(`Building Model`);
     let model: ChargerViewModel = {
       initialize: initialize(dispatch),
       selectCharger: selectCharger(dispatch),
