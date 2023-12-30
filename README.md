@@ -25,7 +25,7 @@ The app uses an MVVM(Model, View, View Model) architecture. The View is comprise
 
   
 
-The View Models encapsulate the business logic in the app. Each View Model object has a state property that is used by the Views to update their UI and functions that implement user interactions. The interaction model of the app is as follows -
+The View Models encapsulate the business logic and state in the app. Each View Model object has a state property that is used by the Views to update their UI and functions that implement user interactions. The interaction model of the app is as follows -
 
 1.  The View Model is made available to the UI via Context and Provider.
 2.  The user interacts with the UI
