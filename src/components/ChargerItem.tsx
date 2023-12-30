@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext } from "react";
-import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, View, Alert } from "react-native";
 import { Button } from "@rneui/base";
 import { ChargerContext } from "../context/ChargerContext";
 
@@ -23,6 +23,12 @@ const ChargerItem: FunctionComponent<ChargerItemProps> = ({
   },
 }) => {
   const chargerModel = useContext(ChargerContext);
+  const showChargingStartErrrorAlert = () =>
+    Alert.alert(
+      "Error",
+      "Failed to start charging. Please try another charger.",
+      [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+    );
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -53,6 +59,9 @@ const ChargerItem: FunctionComponent<ChargerItemProps> = ({
             }
             try {
               const status = await chargerModel.startCharging(ID);
+              if (!status) {
+                showChargingStartErrrorAlert();
+              }
             } catch (err) {}
           }}
         />
