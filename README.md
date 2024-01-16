@@ -135,13 +135,6 @@ import { ChargerContext } from "../context/ChargerContext";
 
 const chargerModel = useContext(ChargerContext);
 ```
-## References
-I used the following references to build this app
-1. The Complete React Native + Hooks Course by Stephen Grider on Udemy was where
-2. https://react.dev/learn/scaling-up-with-reducer-and-context. 
-3. https://react-typescript-cheatsheet.netlify.app/docs/basic/setup 
-4. https://fettblog.eu/typescript-react/
-5. https://medium.com/swlh/react-context-with-usereducer-and-typescript-1b7bd9a1c15
 
 
 
