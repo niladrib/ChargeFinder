@@ -1,4 +1,6 @@
-# README
+# ChargeFinder
+A React Native app to find electric chargers near you.
+
 
 ## Installation
 To install dependencies -
